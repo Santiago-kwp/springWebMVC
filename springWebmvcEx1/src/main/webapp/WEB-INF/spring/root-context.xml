@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+  <!--  <bean class="com.ssg.springwebmvc.sample.SampleDAO"></bean>-->
+  <!--  <bean class="com.ssg.springwebmvc.sample.SampleService"></bean>-->
+
+  <!-- 순서: 쉐프를 먼저 고용하고 레스토랑을 오픈한다.-->
+  <!--  <bean class="com.ssg.springwebmvc.sample.Chef"></bean>-->
+  <!--  <bean class="com.ssg.springwebmvc.sample.Restaurant"></bean>-->
+
+  <!-- 컴포넌트 스캐너 추가 -->
+  <context:component-scan base-package="com.ssg.springwebmvc"/>
+
+  <!-- DB 커넥션 빈 추가해서 스프링 컨테이너에 등록 => dataSource로 가져다씀 -->
+  <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+    <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
+    <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/sqldb?serverTimezone=Asia/Seoul"></property>
+    <property name="username" value="root"></property>
+    <property name="password" value="mysql1234"></property>
+
+    <property name="dataSourceProperties">
+      <props>
+        <prop key="cachePrepStmts">true</prop>
+        <prop key="prepStmtCacheSize">250</prop>
+        <prop key="prepStmtCacheSqlLimit">2048</prop>
+      </props>
+    </property>
+
+  </bean>
+
+  <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+    <constructor-arg ref="hikariConfig"></constructor-arg>
+  </bean>
+
+
+
+</beans>

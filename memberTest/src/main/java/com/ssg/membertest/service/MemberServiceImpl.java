@@ -1,41 +1,34 @@
 package com.ssg.membertest.service;
 
-import com.ssg.membertest.mapper.MemberMapper;
-import com.ssg.membertest.repository.MemberDAO;
-import com.ssg.membertest.domain.MemberVO;
 import com.ssg.membertest.dto.MemberDTO;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.ssg.membertest.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+import java.util.List;
+
+@Repository
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
 
-  private final MemberMapper memberMapper;
-  private final ModelMapper modelMapper;
+    private final MemberMapper memberMapper;
 
+    @Override
+    @Transactional
+    public void createMember(MemberDTO dto) {
+        memberMapper.insert(dto);
+    }
 
-  @Override
-  @Transactional
-  public int createMember(MemberDTO dto) throws SQLException {
-    MemberVO vo = modelMapper.map(dto, MemberVO.class);
-    return memberMapper.insert(vo);
-  }
+    @Override
+    @Transactional
+    public List<MemberDTO> listMembers() {
+        return memberMapper.findAll();
+    }
 
-  @Override
-  @Transactional
-  public List<MemberDTO> listMembers() throws SQLException {
-    List<MemberVO> voList = memberMapper.findAll();
-    List<MemberDTO> dtoList = voList.stream().map(vo -> modelMapper.map(vo, MemberDTO.class)).collect(
-        Collectors.toList());
-
-    return dtoList;
-  }
-
+    @Override
+    @Transactional(readOnly = true)
+    public MemberDTO findById(String mid) {
+        return memberMapper.findById(mid);
+    }
 }
-

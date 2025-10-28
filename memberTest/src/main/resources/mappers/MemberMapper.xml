@@ -6,29 +6,28 @@
 <mapper namespace="com.ssg.membertest.mapper.MemberMapper">
 
   <resultMap id="MemberResultMap" type="com.ssg.membertest.dto.MemberDTO">
-    <id property="userId"    column="userId"/>
-    <result property="userPwd"   column="userPwd"/>
-    <result property="userName"  column="userName"/>
-    <result property="userEmail" column="userEmail"/>
+    <id property="mid"    column="mid"/>
+    <result property="mpw"   column="mpw"/>
+    <result property="mname"  column="mname"/>
     <result property="joinDate"  column="joinDate" jdbcType="DATE" javaType="java.time.LocalDate"/>
   </resultMap>
 
 
   <insert id="insert" parameterType="com.ssg.membertest.dto.MemberDTO">
-    INSERT INTO member (userId, userPwd, userName, userEmail, joinDate)
-    VALUES (#{userId}, #{userPwd}, #{userName}, #{userEmail},
+    INSERT INTO member (mid, mpw, mname, joinDate)
+    VALUES (#{mid}, #{mpw}, #{mname},
     #{joinDate, jdbcType=DATE, javaType=java.time.LocalDate})
   </insert>
 
   <select id="findAll" resultMap="MemberResultMap">
-    SELECT userId, userPwd, userName, userEmail, joinDate
+    SELECT mid, mpw, mname, joinDate
     FROM member
-    ORDER BY userId
+    ORDER BY mid
   </select>
 
   <select id="findById" parameterType="string" resultMap="MemberResultMap">
-    SELECT userId, userPwd, userName, userEmail, joinDate
+    SELECT mid, mpw, mname, joinDate
     FROM member
-    WHERE userId = #{userId}
+    WHERE mid = #{mid}
   </select>
 </mapper>

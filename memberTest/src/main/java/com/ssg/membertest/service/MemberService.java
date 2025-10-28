@@ -7,8 +7,10 @@ import java.util.List;
 
 public interface MemberService {
 
-  public int createMember(MemberDTO dto) throws SQLException;
+  void createMember(MemberDTO dto);
 
-  public List<MemberDTO> listMembers() throws SQLException;
+  List<MemberDTO> listMembers();
+
+  MemberDTO findById(String mid);
 
 }

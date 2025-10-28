@@ -1,49 +1,25 @@
 package com.ssg.membertest.repository;
 
-import com.ssg.membertest.domain.MemberVO;
-import java.lang.reflect.Member;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
+import com.ssg.membertest.dto.MemberDTO;
+import com.ssg.membertest.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-@Primary
 @RequiredArgsConstructor
-public class MemberDAOImpl implements MemberDAO{
+public class MemberDAOImpl implements MemberDAO {
 
-  private final JdbcTemplate jdbcTemplate;
-
-  // 익명 클래스 정의
-  private static final RowMapper<MemberVO> MEMBER_VO_ROW_MAPPER = new RowMapper<MemberVO>() {
+    private final MemberMapper memberMapper;
 
     @Override
-    public MemberVO mapRow(ResultSet rs, int rowNum) throws SQLException {
-      MemberVO memberVO = MemberVO.builder()
-          .mid(rs.getString("mid"))
-          .mpw(rs.getString("mpw"))
-          .mname(rs.getString("mname"))
-          .build();
-      return memberVO;
+    public int insert(MemberDTO dto) {
+        return memberMapper.insert(dto);
     }
-  };
 
-  @Override
-  public int insert(MemberVO vo) {
-    String sql = "INSERT INTO member(mid, mpw, mname)" + "VALUES (?, ?, ?)";
-
-    return jdbcTemplate.update(sql,
-        vo.getMid(), vo.getMpw(), vo.getMname());
-  }
-
-  @Override
-  public List<MemberVO> findAll() {
-    String sql = "SELECT mid, mpw, mname FROM member ORDER BY mid";
-    return jdbcTemplate.query(sql, MEMBER_VO_ROW_MAPPER);
-  }
-
+    @Override
+    public List<MemberDTO> findAll() {
+        return memberMapper.findAll();
+    }
 }

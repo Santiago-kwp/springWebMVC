@@ -1,19 +1,25 @@
 package com.ssg.membertest.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import javax.validation.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Data
-@Builder
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
 public class MemberDTO {
+
+  @NotBlank
   private String mid;
+
+  @NotBlank
   private String mpw;
+
+  @NotBlank
   private String mname;
+
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  private LocalDate joinDate;
 
 }

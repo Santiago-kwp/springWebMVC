@@ -15,6 +15,9 @@
 	<title>Todo</title>
 </head>
 <div class="container-fluid">
+	<c:if test="${not empty msg}">
+		<div class="alert alert-success">${msg}</div>
+	</c:if>
 	<div class="row"><!-- As a link -->
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<div class="container-fluid">
@@ -38,6 +41,7 @@
 		<div class="row content">
 			<div class="col">
 				<c:forEach var="todo" items="${todos}">
+					<a href="/todo/read?tno=${todo.tno}" style="text-decoration: none; color: inherit;">
 					<div class="card">
 						<div class="card-header">
 							Todo
@@ -52,6 +56,7 @@
 							</p>
 						</div>
 					</div>
+					</a>
 				</c:forEach>
 			</div>
 		</div>

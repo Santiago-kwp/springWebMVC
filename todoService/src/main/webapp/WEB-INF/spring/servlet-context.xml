@@ -24,6 +24,7 @@
     <property name="formatters">
       <set>
         <bean class="com.ssg.todoservice.controller.formatter.LocalDateFormatter"/>
+        <bean class="com.ssg.todoservice.controller.formatter.CheckboxFormatter"/>
       </set>
     </property>
   </bean>

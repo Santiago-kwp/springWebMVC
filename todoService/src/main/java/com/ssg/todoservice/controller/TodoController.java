@@ -9,6 +9,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,6 +58,43 @@ public class TodoController {
     rttr.addFlashAttribute("msg", "Todo가 등록되었습니다.");
     return "redirect:/todo/list";
   }
+
+  @GetMapping({"/read", "/modify"})
+  public void read(Long tno, Model model) {
+    TodoDTO dto = todoService.getOne(tno);
+    log.info(dto);
+    model.addAttribute("dto", dto);
+
+  }
+
+  @PostMapping("/remove")
+  public String remove(Long tno, RedirectAttributes redirectAttributes) {
+    log.info("-------------remove------------------");
+    todoService.remove(tno);
+    log.info("tno: " + tno);
+    redirectAttributes.addFlashAttribute("msg", "Todo가 삭제되었습니다.");
+    return "redirect:/todo/list";
+  }
+
+  @PostMapping("/modify")
+  public String modify(@Valid TodoDTO todoDTO,
+                       BindingResult bindingResult,
+                       RedirectAttributes redirectAttributes) {
+    if (bindingResult.hasErrors()) {
+      log.info("has errors.......");
+      redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+      redirectAttributes.addAttribute("tno", todoDTO.getTno());
+      return "redirect:/todo/modify";
+    }
+    log.info(todoDTO);
+    todoService.modify(todoDTO);
+    return "redirect:/todo/list";
+  }
+
+
+
+
+
 
 
 }

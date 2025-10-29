@@ -37,7 +37,7 @@
   <select id="findAll" resultMap="TodoResultMap">
     SELECT tno, title, dueDate, finished, writer
     FROM tbl_todo
-    ORDER BY tno
+    ORDER BY tno DESC
   </select>
 
   <select id="findById" parameterType="long" resultMap="TodoResultMap">
@@ -45,6 +45,15 @@
     FROM tbl_todo
     WHERE tno = #{tno}
   </select>
+
+  <delete id="delete">
+    delete from tbl_todo where tno = #{tno}
+  </delete>
+
+  <update id="update">
+    update tbl_todo set title = #{title} , dueDate = #{dueDate},
+    finished= #{finished} where tno = #{tno}
+  </update>
 
   <!--  myBatis에서는 세미콜론 넣으면 안됨!!!-->
   <select id="getTime" resultType="string">

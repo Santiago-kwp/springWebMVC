@@ -8,6 +8,8 @@ public interface TodoMapper {
   void insert(TodoVO todoVO);
   List<TodoVO> findAll();
   TodoVO findById(Long tno);
+  void delete(Long tno);
+  void update(TodoVO todoVO);
 
 
 }

@@ -8,5 +8,6 @@ import java.util.List;
 public interface MemberDAO {
   int insert(MemberDTO dto);
   List<MemberDTO> findAll();
+  MemberDTO findById(String id);
 
 }

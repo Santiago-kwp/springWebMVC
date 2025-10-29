@@ -13,7 +13,7 @@
 
   <context:component-scan base-package="com.ssg.membertest.controller"/>
 
-<!--  conerversionService 빈을 등록한 후 스프링 MVC 처리를 위해 <mvc:annotation-driven/> 에 지정해야 한다. -->
+<!--  conversionService 빈을 등록한 후 스프링 MVC 처리를 위해 <mvc:annotation-driven/> 에 지정해야 한다. -->
   <mvc:annotation-driven conversion-service="conversionService"/>
   <mvc:resources mapping="/resources/**/" location="classpath:/static/"/>
 

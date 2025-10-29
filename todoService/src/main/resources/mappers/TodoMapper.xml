@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- DTD 규격을 맞춰줘야 태그들을 사용할 수 있다. 문서 스키마 -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssg.todoservice.mapper.TodoMapper">
+
+  <!--  받고자하는 데이터 지정-->
+<!--  <resultMap id="TodoResultMap" type="com.ssg.todoservice.dto.TodoDTO">-->
+<!--    <id property="tno"    column="tno"/>-->
+<!--    <result property="title"   column="title"/>-->
+<!--    <result property="dueDate"  column="dueDate" jdbcType="DATE" javaType="java.time.LocalDate"/>-->
+<!--    <result property="finished"  column="finished" />-->
+<!--    <result property="writer"  column="writer" />-->
+<!--  </resultMap>-->
+
+  <!--  받고자하는 데이터 지정-->
+  <resultMap id="TodoResultMap" type="com.ssg.todoservice.domain.TodoVO">
+    <id property="tno"    column="tno"/>
+    <result property="title"   column="title"/>
+    <result property="dueDate"  column="dueDate" jdbcType="DATE" javaType="java.time.LocalDate"/>
+    <result property="finished"  column="finished" />
+    <result property="writer"  column="writer" />
+
+  </resultMap>
+
+
+  <!-- java.time.LocalDate 매핑 : JSR-310 타입 핸들러 이용-->
+  <insert id="insert" parameterType="com.ssg.todoservice.domain.TodoVO">
+    INSERT INTO tbl_todo (title, dueDate, finished, writer)
+    VALUES (#{title},
+    #{dueDate, jdbcType=DATE, javaType=java.time.LocalDate},
+    #{finished}, #{writer})
+  </insert>
+
+  <select id="findAll" resultMap="TodoResultMap">
+    SELECT tno, title, dueDate, finished, writer
+    FROM tbl_todo
+    ORDER BY tno
+  </select>
+
+  <select id="findById" parameterType="long" resultMap="TodoResultMap">
+    SELECT tno, title, dueDate, finished, writer
+    FROM tbl_todo
+    WHERE tno = #{tno}
+  </select>
+
+  <!--  myBatis에서는 세미콜론 넣으면 안됨!!!-->
+  <select id="getTime" resultType="string">
+    SELECT NOW()
+  </select>
+
+
+
+
+</mapper>
+
+
+

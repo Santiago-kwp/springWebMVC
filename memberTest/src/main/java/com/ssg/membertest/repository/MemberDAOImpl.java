@@ -11,6 +11,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberDAOImpl implements MemberDAO {
 
+    // DAO는 매퍼인터페이스에게 나의 역할의 위임했다
+
     private final MemberMapper memberMapper;
 
     @Override
@@ -22,4 +24,8 @@ public class MemberDAOImpl implements MemberDAO {
     public List<MemberDTO> findAll() {
         return memberMapper.findAll();
     }
+
+    @Override
+    public MemberDTO findById(String mid) { return memberMapper.findById(mid); }
+
 }

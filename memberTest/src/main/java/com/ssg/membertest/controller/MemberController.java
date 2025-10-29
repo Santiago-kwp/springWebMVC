@@ -3,6 +3,8 @@ package com.ssg.membertest.controller;
 import com.ssg.membertest.dto.MemberDTO;
 import com.ssg.membertest.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.time.LocalDate;
 
+@Log4j2
 @Controller
 @RequestMapping("/members")
 @RequiredArgsConstructor
@@ -56,6 +59,7 @@ public class MemberController {
             return "member/form";
         }
 
+        // flash 라서 한번만 뜸
         rttr.addFlashAttribute("msg", "회원이 등록되었습니다.");
         return "redirect:/members";
     }
@@ -70,6 +74,7 @@ public class MemberController {
         }
         model.addAttribute("member", found);
         return "member/detail";
+        // .jsp를 suffix로 등록했기 때문
     }
 
     /** 중복키 등 전역 예외 메시지  처리 */

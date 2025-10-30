@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- DTD 규격을 맞춰줘야 태그들을 사용할 수 있다. 문서 스키마 -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssg.boardservice.mapper.BoardMapper">
+
+  <!--  받고자하는 데이터 지정-->
+  <resultMap id="BoardResultMap" type="com.ssg.boardservice.domain.BoardVO">
+    <id property="bId"    column="bid"/>
+    <result property="title"   column="title"/>
+    <result property="content"   column="content"/>
+    <result property="writer"  column="writer" />
+    <result property="password"  column="password" />
+    <result property="file"  column="file" />
+  </resultMap>
+
+  <insert id="insert" parameterType="com.ssg.boardservice.domain.BoardVO"
+    useGeneratedKeys="true" keyProperty="bId"> INSERT INTO board (title, content, writer, password, file_path, original_file_name)
+    VALUES (#{title}, #{content}, #{writer}, #{password}, #{file_path}, #{original_file_name})
+  </insert>
+
+  <select id="findAll" resultMap="BoardResultMap">
+    SELECT * FROM board ORDER BY bId DESC
+  </select>
+
+  <select id="findById" parameterType="long" resultMap="BoardResultMap">
+    SELECT * FROM board WHERE bId = #{bId}
+  </select>
+
+  <delete id="delete">
+    delete from board where bId = #{bId}
+  </delete>
+
+  <update id="update">
+    update board set title = #{title} , content= #{content}, file = #{file} where bId = #{bId}
+  </update>
+
+  <update id="increaseHits" parameterType="long">
+    UPDATE board SET hits = hits + 1 WHERE bId = #{bId}
+  </update>
+
+
+
+
+
+
+</mapper>

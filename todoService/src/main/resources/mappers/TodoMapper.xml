@@ -5,16 +5,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssg.todoservice.mapper.TodoMapper">
-
-  <!--  받고자하는 데이터 지정-->
-<!--  <resultMap id="TodoResultMap" type="com.ssg.todoservice.dto.TodoDTO">-->
-<!--    <id property="tno"    column="tno"/>-->
-<!--    <result property="title"   column="title"/>-->
-<!--    <result property="dueDate"  column="dueDate" jdbcType="DATE" javaType="java.time.LocalDate"/>-->
-<!--    <result property="finished"  column="finished" />-->
-<!--    <result property="writer"  column="writer" />-->
-<!--  </resultMap>-->
-
+  
   <!--  받고자하는 데이터 지정-->
   <resultMap id="TodoResultMap" type="com.ssg.todoservice.domain.TodoVO">
     <id property="tno"    column="tno"/>

@@ -48,12 +48,12 @@
 									<input type="text" name="title" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg-1">
 								</div>
 
-								<div class="input-group input-group-lg">
+								<div class="input-group input-group-lg mb-3">
 									<span class="input-group-text" id="inputGroup-sizing-lg-2">dueDate</span>
 									<input type="date" name="dueDate" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg-2">
 								</div>
 
-								<div class="input-group input-group-lg">
+								<div class="input-group input-group-lg mb-3">
 									<span class="input-group-text" id="inputGroup-sizing-lg-3">Writer</span>
 									<input type="text" name="writer" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg-3">
 								</div>

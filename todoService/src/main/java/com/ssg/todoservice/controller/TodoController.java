@@ -26,7 +26,6 @@ public class TodoController {
   @RequestMapping("/list")
   public void list(Model model) {
     log.info("todo list");
-
     model.addAttribute("todos", todoService.listTodos());
   }
 
@@ -64,7 +63,6 @@ public class TodoController {
     TodoDTO dto = todoService.getOne(tno);
     log.info(dto);
     model.addAttribute("dto", dto);
-
   }
 
   @PostMapping("/remove")
@@ -88,6 +86,7 @@ public class TodoController {
     }
     log.info(todoDTO);
     todoService.modify(todoDTO);
+    redirectAttributes.addFlashAttribute("msg", todoDTO.getTitle() + " Todo가 수정되었습니다.");
     return "redirect:/todo/list";
   }
 

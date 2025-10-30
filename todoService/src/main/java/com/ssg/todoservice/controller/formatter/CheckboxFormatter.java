@@ -9,10 +9,7 @@ public class CheckboxFormatter implements Formatter<Boolean> {
 
     @Override
     public Boolean parse(String text, Locale locale) throws ParseException {
-        if(text == null ) {
-            return false;
-        }
-        return text.equals("on");
+        return text != null && text.equals("on");
     }
 
     @Override

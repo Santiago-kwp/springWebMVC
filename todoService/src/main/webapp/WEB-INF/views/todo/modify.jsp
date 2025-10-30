@@ -59,10 +59,14 @@
     {
         e.preventDefault()
         e.stopPropagation()
-        formObj.action ="/todo/remove"
-        formObj.method ="post"
-        formObj.submit()
-    },false);
+
+        const confirmed = confirm("정말 삭제하시겠습니까? 삭제 후에는 복구할 수 없습니다.")
+        if (confirmed) {
+            formObj.action = "/todo/remove"
+            formObj.method = "post"
+            formObj.submit()
+        }
+    }, false)
 
     document.querySelector(".btn-primary").addEventListener("click",function(e) {
         e.preventDefault()

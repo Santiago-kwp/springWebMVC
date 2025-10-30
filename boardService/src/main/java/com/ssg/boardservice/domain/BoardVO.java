@@ -16,8 +16,8 @@ public class BoardVO {
   private String writer;
   private String content;
   private String password;
-  private LocalDateTime created_date;
-  private LocalDateTime updated_date;
+  private LocalDateTime createdDate;
+  private LocalDateTime updatedDate;
   private Long hits;
   private String filePath;
   private String originalFileName; // <--- 이 필드를 추가합니다.

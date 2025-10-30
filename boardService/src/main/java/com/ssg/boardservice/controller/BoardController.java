@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DuplicateKeyException;import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;import org.springframework.web.bind.annotation.GetMapping;import org.springframework.web.bind.annotation.ModelAttribute;import org.springframework.web.bind.annotation.PostMapping;import org.springframework.web.bind.annotation.RequestMapping;import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
@@ -31,7 +33,6 @@ public class BoardController {
   @GetMapping("/register")
   public void registerForm(Model model) { // ModelAttribute를 제거하고, 빈 DTO를 모델에 추가
     log.info("board register form Page");
-    model.addAttribute("boardRegisterDTO", new BoardRegisterDTO());
   }
 
 
@@ -57,19 +58,21 @@ public class BoardController {
       return "board/register";
     } catch (IOException e) {
       log.info("파일 저장 중 문제 발생!!");
-      throw new RuntimeException(e);
+      return "board/register";
     }
 
     rttr.addFlashAttribute("msg", "새 게시글이 등록되었습니다.");
     return "redirect:/board/list";
   }
 
-  @GetMapping({"/read", "/modify"})
-  public void read(Long bId, Model model) {
+  @GetMapping("/read/{bId}")
+  public String read(@PathVariable("bId") Long bId, Model model) {
     BoardDTO dto = boardService.getBoard(bId);
     log.info(dto);
     model.addAttribute("dto", dto);
+    return "board/read"; // JSP 경로에 따라 수정
   }
+
 
   @PostMapping("/remove")
   public String remove(Long bId, RedirectAttributes redirectAttributes) {

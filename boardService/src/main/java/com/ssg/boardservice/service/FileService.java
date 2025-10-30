@@ -28,6 +28,8 @@ public class FileService {
     String uuid = UUID.randomUUID().toString(); // 고유한 파일명 생성
     String savedFileName = uuid + "_" + originalFileName;
 
+    log.info("uploadPath 값 확인: " + uploadPath);
+
     Path targetPath = Paths.get(uploadPath, savedFileName);
 
     File uploadDir = new File(uploadPath);
@@ -35,9 +37,14 @@ public class FileService {
       uploadDir.mkdirs(); // 디렉토리가 없으면 생성
     }
 
-    file.transferTo(targetPath); // 파일 저장
+    try {
+      file.transferTo(targetPath);
+      log.info("파일 저장 성공: " + targetPath.toString());
+    } catch (IOException e) {
+      log.error("파일 저장 실패", e);
+      throw e;
+    }
 
-    log.info("파일 저장 경로: " + targetPath.toString());
     return new String[]{targetPath.toString(), originalFileName}; // [저장된 전체 경로, 원본 파일명]
   }
 

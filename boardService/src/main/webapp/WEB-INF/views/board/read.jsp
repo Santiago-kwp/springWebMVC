@@ -9,7 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-	<title>게시글 작성</title>
+	<title>게시글 하나보기</title>
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -389,8 +389,8 @@
 			<div class="container-fluid">
 
 				<!-- Page Heading -->
-				<h1 class="h3 mb-2 text-gray-800">게시글 작성하기</h1>
-				<p class="mb-4">게시글을 재밌게 작성해봅시다!</p>
+				<h1 class="h3 mb-2 text-gray-800">게시글 하나 읽기</h1>
+				<p class="mb-4">게시글을 재밌게 읽어봅시다!</p>
 				<!-- DataTales Example -->
 				<div class="card o-hidden border-0 shadow-lg my-1">
 					<div class="card-body p-0">
@@ -400,44 +400,32 @@
 							<div class="col-lg-7">
 								<div class="p-5">
 									<div class="text-center">
-										<h1 class="h4 text-gray-900 mb-4">Create an Board!</h1>
+										<h1 class="h4 text-gray-900 mb-4">Read an Board!</h1>
 									</div>
-									<form class="user" action="${pageContext.request.contextPath}/board/register" method="POST" enctype="multipart/form-data">
+									<form class="user" action="${pageContext.request.contextPath}/board/modify" method="GET">
 										<div class="form-group">
 											<div class="col-sm-6 mb-3 mb-sm-0">
 												<input type="text" class="form-control form-control-user" id="exampleFirstName"
-												       placeholder="게시글 제목" name="title">
+												       placeholder="게시글 제목" name="title" value="${dto.title}" readonly>
 											</div>
 										</div>
 										<div class="form-group">
 											<textarea class="form-control form-control-user" id="exampleInputContent"
-											          placeholder="게시글 내용" **rows="10"** name="content"></textarea>
+											          placeholder="게시글 내용" **rows="10"** name="content" value="${dto.content}" readonly></textarea>
 										</div>
 										<div class="form-group row">
 											<input type="text" class="form-control form-control-user" id="exampleInputWriter"
-											       placeholder="작성자" name="writer">
+											       placeholder="작성자" name="writer" value="${dto.writer}" readonly>
 										</div>
 										<div class="form-group">
-											<label for="exampleInputFile">파일 첨부</label>
-											<input type="file" class="form-control-file" id="exampleInputFile" name="file">
-										</div>
-										<div class="form-group row">
-											<div class="col-sm-6 mb-3 mb-sm-0">
-												<input type="password" class="form-control form-control-user"
-												       id="exampleInputPassword" placeholder="Password" name="password">
-											</div>
-											<div class="col-sm-6">
-												<input type="password" class="form-control form-control-user"
-												       id="exampleRepeatPassword" placeholder="Repeat Password">
-											</div>
+											<label for="exampleInputFileName">첨부된 파일</label>
+											<input type="text" class="form-control" id="exampleInputFileName"
+												   value="${not empty dto.originalFileName ? dto.originalFileName : '첨부 없음'}" readonly>
 										</div>
 										<button type="submit" class="btn btn-primary btn-user btn-block">
-											새글 등록하기
+											글 수정/삭제 하러가기
 										</button>
 										<hr>
-										<button type="reset" class="btn btn-google btn-user btn-block">
-											<i class="fab fa-google fa-fw"></i> 리셋하기!
-										</button>
 
 									</form>
 									<hr>

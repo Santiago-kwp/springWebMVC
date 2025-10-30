@@ -8,17 +8,21 @@
 
   <!--  받고자하는 데이터 지정-->
   <resultMap id="BoardResultMap" type="com.ssg.boardservice.domain.BoardVO">
-    <id property="bId"    column="bid"/>
+    <id property="bId"    column="bId"/>
     <result property="title"   column="title"/>
     <result property="content"   column="content"/>
     <result property="writer"  column="writer" />
     <result property="password"  column="password" />
-    <result property="file"  column="file" />
+    <result property="filePath"  column="file_path" />
+    <result property="originalFileName"  column="original_file_name" />
+    <result property="createdDate"  column="created_date" />
+    <result property="updatedDate"  column="updated_date" />
+    <result property="hits"  column="hits" />
   </resultMap>
 
   <insert id="insert" parameterType="com.ssg.boardservice.domain.BoardVO"
     useGeneratedKeys="true" keyProperty="bId"> INSERT INTO board (title, content, writer, password, file_path, original_file_name)
-    VALUES (#{title}, #{content}, #{writer}, #{password}, #{file_path}, #{original_file_name})
+    VALUES (#{title}, #{content}, #{writer}, #{password}, #{filePath}, #{originalFileName})
   </insert>
 
   <select id="findAll" resultMap="BoardResultMap">
@@ -34,7 +38,8 @@
   </delete>
 
   <update id="update">
-    update board set title = #{title} , content= #{content}, file = #{file} where bId = #{bId}
+    update board set title = #{title} , content= #{content},
+    file_path = #{filePath}, original_file_name = #{originalFileName} where bId = #{bId}
   </update>
 
   <update id="increaseHits" parameterType="long">

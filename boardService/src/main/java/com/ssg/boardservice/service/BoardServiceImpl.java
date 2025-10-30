@@ -10,13 +10,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-@Slf4j
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService{
@@ -38,13 +40,15 @@ public class BoardServiceImpl implements BoardService{
       originalFileName = fileInfo[1];
     }
 
-
-    BoardVO vo = modelMapper.map(dto, BoardVO.class);
-    // 3. 파일 정보 수동 설정
-    vo = BoardVO.builder()
-        .originalFileName(originalFileName)
-        .filePath(savedFilePath)
-        .build();
+    // 3. 파일 정보 수동 생성 - 빌더패턴
+    BoardVO vo = BoardVO.builder()
+            .title(dto.getTitle())
+            .content(dto.getContent())
+            .writer(dto.getWriter())
+            .password(dto.getPassword())
+            .originalFileName(originalFileName)
+            .filePath(savedFilePath)
+            .build();
 
     boardMapper.insert(vo);
   }

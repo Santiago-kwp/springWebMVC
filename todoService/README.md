@@ -71,19 +71,19 @@ src/test/                      # 단위 테스트
 
 ## 📄구현 결과
 ### Todo list 조회
-![image.png](/assets/images/list.png)
+![image.png](assets/images/list.png)
 
 ### Todo 등록
-![image.png](/assets/images/register.png)
-![image.png](/assets/images/registerSucceed.png)
+![image.png](assets/images/register.png)
+![image.png](assets/images/registerSucceed.png)
 
 ### Todo 수정
-![image.png](/assets/images/modifyForm.png)
-![image.png](/assets/images/modifySucceed.png)
+![image.png](assets/images/modifyForm.png)
+![image.png](assets/images/modifySucceed.png)
 
 ### Todo삭제
-![image.png](/assets/images/DeleteConfirm.png)
-![image.png](/assets/images/Delete.png)
+![image.png](assets/images/DeleteConfirm.png)
+![image.png](assets/images/Delete.png)
 
 ## 🔧 주요 구현 코드
 

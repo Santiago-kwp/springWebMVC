@@ -26,9 +26,10 @@
   </insert>
 
   <select id="findAll" resultMap="TodoResultMap">
+<!--    MyBatis는 기본적으로 getXXX, setXXX 를 통해서 동작하므로, #{skip}는 PageRequestDTO의 getSkip()를 호출한다. -->
     SELECT tno, title, dueDate, finished, writer
     FROM tbl_todo
-    ORDER BY tno DESC
+    ORDER BY tno DESC limit #{skip}, #{size}
   </select>
 
   <select id="findById" parameterType="long" resultMap="TodoResultMap">
@@ -49,6 +50,11 @@
   <!--  myBatis에서는 세미콜론 넣으면 안됨!!!-->
   <select id="getTime" resultType="string">
     SELECT NOW()
+  </select>
+
+  <!-- todo 테이블의 전체 row 개수를 반환 -->
+  <select id="getCount" resultType="int">
+    select count(tno) from tbl_todo
   </select>
 
 

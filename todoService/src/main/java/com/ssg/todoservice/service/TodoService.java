@@ -1,5 +1,7 @@
 package com.ssg.todoservice.service;
 
+import com.ssg.todoservice.dto.PageRequestDTO;
+import com.ssg.todoservice.dto.PageResponseDTO;
 import com.ssg.todoservice.dto.TodoDTO;
 import java.util.List;
 
@@ -7,12 +9,14 @@ public interface TodoService {
 
   void register(TodoDTO dto);
 
-  List<TodoDTO> listTodos();
+  List<TodoDTO> listTodos(PageRequestDTO pageRequestDTO);
 
   TodoDTO getOne(Long tno);
 
   void remove(Long tno);
 
   void modify(TodoDTO todoDTO);
+
+  PageResponseDTO<TodoDTO> getList(PageRequestDTO pageRequestDTO);
 
 }

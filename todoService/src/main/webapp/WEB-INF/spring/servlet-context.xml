@@ -17,8 +17,14 @@
   <!--  conversionService 빈을 등록한 후 스프링 MVC 처리를 위해 <mvc:annotation-driven/> 에 지정해야 한다. -->
   <mvc:annotation-driven conversion-service="conversionService"/>
 <!--  <mvc:resources mapping="/resources/**/" location="classpath:/static/"/>-->
-<!--  webapp/resoureces/ 밑에 html 작업 시-->
-  <mvc:resources mapping="/resources/**/" location="/resources/"/>
+
+
+<!--  classpath : /java/com.ssg.todoservice.recources-->
+<!--  정적 파일 경로 지정 -->
+  <mvc:resources mapping="/resources/**/" location="classpath:/static/"/>
+
+  <!--  webapp/resoureces/ 밑에 html 작업 시-->
+  <!--  <mvc:resources mapping="/resources/**/" location="/resources/"/>-->
 
   <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
     <property name="formatters">

@@ -1,6 +1,8 @@
 package com.ssg.todoservice.service;
 
 import com.ssg.todoservice.domain.TodoVO;
+import com.ssg.todoservice.dto.PageRequestDTO;
+import com.ssg.todoservice.dto.PageResponseDTO;
 import com.ssg.todoservice.dto.TodoDTO;
 import com.ssg.todoservice.mapper.TodoMapper;
 import java.util.List;
@@ -25,8 +27,8 @@ public class TodoServiceImpl implements TodoService{
   }
 
   @Override
-  public List<TodoDTO> listTodos() {
-    List<TodoVO> voList = todoMapper.findAll();
+  public List<TodoDTO> listTodos(PageRequestDTO pageRequestDTO) {
+    List<TodoVO> voList = todoMapper.findAll(pageRequestDTO);
     return voList.stream().map(vo -> modelMapper.map(vo, TodoDTO.class)).collect(Collectors.toList());
   }
 
@@ -46,6 +48,22 @@ public class TodoServiceImpl implements TodoService{
     todoMapper.update(todoVO);
   }
 
+  @Override
+  public PageResponseDTO<TodoDTO> getList(PageRequestDTO pageRequestDTO) {
+    List<TodoVO> voList = todoMapper.findAll(pageRequestDTO);
+
+    List<TodoDTO> dtoList = voList.stream().map(vo -> modelMapper.map(vo,TodoDTO.class)).collect(
+        Collectors.toList());
+
+    int total = todoMapper.getCount(pageRequestDTO);
+
+    PageResponseDTO<TodoDTO> pageResponseDTO =
+        PageResponseDTO.<TodoDTO>withAll()
+        .dtoList(dtoList).total(total).pageRequestDTO(pageRequestDTO).build();
+
+
+    return pageResponseDTO;
+  }
 
 
 }

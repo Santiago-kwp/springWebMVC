@@ -29,7 +29,8 @@
 				</button>
 				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 					<div class="navbar-nav">
-						<a class="nav-link active" aria-current="page" href="/todo/register">Todo 등록</a>
+						<a class="nav-link active" aria-current="page" href="/todo/register">Todo
+							등록</a>
 						<%--						<a class="nav-link" href="#">Features</a>--%>
 						<%--						<a class="nav-link" href="#">Pricing</a>--%>
 						<%--						<a class="nav-link disabled">Disabled</a>--%>
@@ -40,24 +41,54 @@
 
 		<div class="row content">
 			<div class="col">
-				<c:forEach var="todo" items="${todos}">
-					<a href="/todo/read?tno=${todo.tno}" style="text-decoration: none; color: inherit;">
-					<div class="card">
-						<div class="card-header">
-							Todo
-						</div>
-						<div class="card-body">
-							<h5 class="card-title">제목: ${todo.title}</h5>
-							<p class="card-text">작성자: ${todo.writer}</p>
-							<p class="card-text">
-								상태: <span class="${todo.finished ? 'text-success' : 'text-warning'}">
-									${todo.finished ? '완료됨' : '진행 중'}
-							</span>
-							</p>
+				<div class="card">
+					<div class="card-header">
+						Featured
+					</div>
+					<div class="card-body">
+						<h5 class="card-title">TodoService</h5>
+						<table class="table">
+							<thead>
+							<tr>
+								<th scope="col">번 호</th>
+								<th scope="col">제 목</th>
+								<th scope="col">작성자</th>
+								<th scope="col">dueDate</th>
+								<th scope="col">진 행</th>
+							</tr>
+							</thead>
+							<tbody>
+							<c:forEach var="dto" items="${responseDTO.dtoList}" varStatus="status">
+								<tr>
+									<th scope="row">${status.count}</th>
+									<td><a href="/todo/read?tno=${dto.tno}"><c:out
+											value="${dto.title}"/></a></td>
+									<td><c:out value="${dto.writer}"/></td>
+									<td><c:out value="${dto.dueDate}"/></td>
+									<td><c:out value="${dto.finished}"/></td>
+								</tr>
+							</c:forEach>
+							</tbody>
+						</table>
+						<div class="float-end">
+							<ul class="pagination flex-wrap">
+								<c:if test="${responseDTO.prev}">
+									<li class="page-item"><a href="/todo/list?page=${responseDTO.start - 1}&size=${responseDTO.size}" class="page-link">Previous</a>
+									</li>
+								</c:if>
+								<c:forEach begin="${responseDTO.start}" end="${responseDTO.end}"
+								           var="num">
+									<li class="page-item ${responseDTO.page == num ? "active":""}"><a class="page-link"
+									                         href="/todo/list?page=${num}&size=10">${num}</a>
+									</li>
+								</c:forEach>
+								<c:if test="${responseDTO.next}">
+									<li class="page-item"><a class="page-link" href="/todo/list?page=${responseDTO.end + 1}&size=${responseDTO.size}">Next</a></li>
+								</c:if>
+							</ul>
 						</div>
 					</div>
-					</a>
-				</c:forEach>
+				</div>
 			</div>
 		</div>
 

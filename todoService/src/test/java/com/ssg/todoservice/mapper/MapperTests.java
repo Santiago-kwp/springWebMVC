@@ -2,7 +2,9 @@ package com.ssg.todoservice.mapper;
 
 
 import com.ssg.todoservice.domain.TodoVO;
+import com.ssg.todoservice.dto.PageRequestDTO;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,14 +37,19 @@ public class MapperTests {
     );
   }
 
-  @Test
-  public void testFindAll() {
-    todoMapper.findAll().forEach(log::info);
-  }
+
 
   @Test
   public void testFindById() {
     log.info(todoMapper.findById(1L));
+  }
+
+
+  @Test
+  public void testSelectAll() {
+    PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(2).size(10).build();
+    List<TodoVO> voList = todoMapper.findAll(pageRequestDTO);
+    voList.forEach(log::info);
   }
 
 

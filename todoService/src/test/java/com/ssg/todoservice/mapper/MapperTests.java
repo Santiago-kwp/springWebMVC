@@ -21,6 +21,7 @@ public class MapperTests {
   @Autowired(required = false)
   private TodoMapper todoMapper;
 
+
   @Test
   public void testGetTime() {
     log.info(todoMapper.getTime());
@@ -45,12 +46,6 @@ public class MapperTests {
   }
 
 
-  @Test
-  public void testSelectAll() {
-    PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(2).size(10).build();
-    List<TodoVO> voList = todoMapper.findAll(pageRequestDTO);
-    voList.forEach(log::info);
-  }
 
 
 }

@@ -25,11 +25,79 @@
     #{finished}, #{writer})
   </insert>
 
+<!--  <sql id="search">-->
+<!--    <where>-->
+<!--      writer LIKE '%벌꿀%'-->
+<!--    </where>-->
+<!--  </sql>-->
+
+<!--  <sql id="search">-->
+<!--    <where>-->
+<!--      &lt;!&ndash; keyword 있을 때만 LIKE 생성 &ndash;&gt;-->
+<!--      <if test="keyword != null and keyword.trim() != '' and types != null and types.size() > 0">-->
+<!--        &lt;!&ndash; kw 라는 이름의 변수 바인딩       &ndash;&gt;-->
+<!--        <bind name="kw" value="'%' + keyword + '%'"/>-->
+<!--        &lt;!&ndash; 괄호로 감싸진 조건 블록을 생성. 마지막에 붙는 OR는 자동 제거됨. &ndash;&gt;-->
+<!--        <trim prefix="(" suffix=")" suffixOverrides="OR">-->
+<!--          <foreach collection="types" item="type">-->
+<!--            <choose>-->
+<!--              <when test="'t'.equals(type)"> title LIKE #{kw} OR </when>-->
+<!--              <when test="'w'.equals(type)"> writer LIKE #{kw} OR </when>-->
+<!--            </choose>-->
+<!--          </foreach>-->
+<!--        </trim>-->
+<!--      </if>-->
+
+<!--      <if test="finished != null and finished">-->
+<!--        AND finished = TRUE-->
+<!--      </if>-->
+
+<!--      <if test="from != null and to != null">-->
+<!--        AND dueDate BETWEEN #{from} AND #{to}-->
+<!--      </if>-->
+<!--    </where>-->
+<!--  </sql>-->
+
+  <sql id="search">
+    <where>
+      <if test="keyword != null and keyword.trim() != '' and types != null">
+        <trim prefix="(" suffix=")" suffixOverrides="OR">
+          <foreach collection="types" item="type">
+            <choose>
+              <when test="'t'.equals(type)"> title LIKE CONCAT('%', #{keyword}, '%') OR </when>
+              <when test="'w'.equals(type)"> writer LIKE CONCAT('%', #{keyword}, '%') OR </when>
+            </choose>
+          </foreach>
+        </trim>
+      </if>
+
+      <if test="finished != null and finished == true">
+        AND finished = TRUE
+      </if>
+
+      <if test="finished != null and finished == false">
+        AND finished = FALSE
+      </if>
+
+      <if test="from != null and to != null">
+        AND dueDate BETWEEN #{from} AND #{to}
+      </if>
+    </where>
+  </sql>
+
   <select id="findAll" resultMap="TodoResultMap">
 <!--    MyBatis는 기본적으로 getXXX, setXXX 를 통해서 동작하므로, #{skip}는 PageRequestDTO의 getSkip()를 호출한다. -->
     SELECT tno, title, dueDate, finished, writer
     FROM tbl_todo
     ORDER BY tno DESC limit #{skip}, #{size}
+  </select>
+
+  <select id="findList" resultMap="TodoResultMap">
+    SELECT tno, title, dueDate, finished, writer
+    FROM tbl_todo
+    <include refid="search"/>
+    ORDER BY tno DESC limit #{skip, jdbcType=INTEGER}, #{size, jdbcType=INTEGER}
+    <!--  JDBC 타입을 명시하여 null 처리 안정성 확보-->
   </select>
 
   <select id="findById" parameterType="long" resultMap="TodoResultMap">
@@ -55,7 +123,10 @@
   <!-- todo 테이블의 전체 row 개수를 반환 -->
   <select id="getCount" resultType="int">
     select count(tno) from tbl_todo
+    <include refid="search"/>
   </select>
+
+
 
 
 

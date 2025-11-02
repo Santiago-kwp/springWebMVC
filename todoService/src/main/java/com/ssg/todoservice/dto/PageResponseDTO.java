@@ -36,8 +36,8 @@ public class PageResponseDTO<E> {
 
     // 페이지 번호를 계산하는 수식
     this.end =   (int)(Math.ceil(this.page / 10.0 )) *  10;
-    
-    this.start = this.end - 9;
+
+    this.start = Math.max(1, this.end - 9);
 
     int last =  (int)(Math.ceil((total/(double)size)));
 

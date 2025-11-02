@@ -53,6 +53,7 @@
     <!-- classpath:  src/main/resources  -->
     <!-- mappers 폴더 밑에 폴더가 있어도 상관없고, mappers/**/*.xml은 이름에 상관없는 xml 파일 등록   -->
     <property name="mapperLocations" value="classpath:/mappers/**/*.xml"/>
+    <property name="configLocation" value="classpath:mybatis-config.xml"/>
   </bean>
 
   <!--  mybatis 매퍼 인터페이스 스캔 -->

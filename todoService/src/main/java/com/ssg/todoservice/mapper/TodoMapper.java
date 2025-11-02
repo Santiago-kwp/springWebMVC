@@ -7,6 +7,8 @@ public interface TodoMapper {
   String getTime();
   void insert(TodoVO todoVO);
   List<TodoVO> findAll(PageRequestDTO pageRequestDTO);
+  List<TodoVO> findList(PageRequestDTO pageRequestDTO);
+
   TodoVO findById(Long tno);
   void delete(Long tno);
   void update(TodoVO todoVO);

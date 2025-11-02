@@ -2,8 +2,12 @@ package com.ssg.todoservice.dto;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
@@ -29,79 +33,106 @@ public class PageRequestDTO {
   @Positive
   private int size = 10;
 
+  /** 리스트 페이지 유지용 링크 쿼리 */
   private String link;
 
-  private String[] types;
+  /** 검색 타입들: "t"(title), "w"(writer) */
+  private List<String> types;
 
+  /** 검색어 */
   private String keyword;
 
+  /** 완료 여부 필터 */
   private boolean finished;
 
+  /** 기간 검색 */
   private LocalDate from;
-
   private LocalDate to;
 
 
-  public int getSkip(){
-
-    return (page -1) * 10;
+  /** LIMIT offset */
+  public int getSkip() {
+    // page가 1 미만이거나 size가 1 미만인 경우를 방어
+    int safePage = Math.max(1, page);
+    int safeSize = Math.max(1, size);
+    return (safePage - 1) * safeSize;
   }
 
-//    public String getLink() {
-//        if(link == null){
-//            StringBuilder builder = new StringBuilder();
-//
-//            builder.append("page=" + this.page);
-//
-//            builder.append("&size=" + this.size);
-//            link = builder.toString();
-//        }
-//        return link;
-//    }
+  /** 키워드 존재 여부 */
+  public boolean hasKeyword() {
+    return keyword != null && !keyword.trim().isEmpty();
+  }
+
+  /** 타입 존재 여부 */
+  public boolean hasTypes() {
+    return types != null && !types.isEmpty();
+  }
+
+
+  /** 특정 타입 포함 여부 */
+  public boolean checkType(String type) {
+    return hasTypes() && types.contains(type);
+  }
+
+  /** 컨트롤러/서비스 진입 초기에 한 번 호출해서 값 정리하면 안전 */
+  public void normalize() {
+    if (page < 1) page = 1;
+    if (size < 1) size = 10;
+    if (size > 100) size = 100;
+
+    // types 정리: null 방지 + 공백/널 원소 제거
+    if (types == null) {
+      types = Collections.emptyList();
+    } else {
+      types.removeIf(t -> t == null || t.trim().isEmpty());
+    }
+
+    // 기간(from <= to) 보정은 필요 시 이곳에서 처리
+     if (from != null && to != null && from.isAfter(to)) { LocalDate tmp = from; from = to; to = tmp; }
+  }
+
+
 
   public String getLink() {
     StringBuilder builder = new StringBuilder();
 
-    builder.append("page=" + this.page);
+    builder.append("page=").append(Math.max(1, page));
+    builder.append("&size=").append(Math.max(1, size));
 
-    builder.append("&size=" + this.size);
-
-    if(finished){
+    if (finished) {
       builder.append("&finished=on");
     }
 
-    if(types != null && types.length > 0){
-      for (int i = 0; i < types.length ; i++) {
-        builder.append("&types=" + types[i]);
+    if (hasTypes()) {
+      for (String t : types) {
+        builder.append("&types=").append(encodeUTF8(t));
       }
     }
 
-    if(keyword != null){
-      try {
-        builder.append("&keyword=" + URLEncoder.encode(keyword,"UTF-8"));
-      } catch (UnsupportedEncodingException e) {
-        e.printStackTrace();
-      }
+    if (hasKeyword()) {
+      builder.append("&keyword=").append(encodeUTF8(keyword));
     }
 
-    if(from != null){
-      builder.append("&from=" + from.toString());
+    if (from != null) {
+      builder.append("&from=").append(from);
     }
 
-    if(to != null){
-      builder.append("&to=" + to.toString());
+    if (to != null) {
+      builder.append("&to=").append(to);
     }
 
     return builder.toString();
   }
 
-
-  public boolean checkType(String type){
-
-    if(types == null || types.length == 0){
-      return false;
+  private String encodeUTF8(String value) {
+    try {
+      return URLEncoder.encode(value, "UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      // UTF-8은 항상 지원되므로 예외 발생 가능성은 거의 없음
+      throw new RuntimeException("UTF-8 인코딩 실패", e);
     }
-    return Arrays.stream(types).anyMatch(type::equals);
   }
+
+
 
 }

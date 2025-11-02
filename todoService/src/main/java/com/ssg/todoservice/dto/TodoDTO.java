@@ -1,6 +1,7 @@
 package com.ssg.todoservice.dto;
 
 import java.time.LocalDate;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,10 +14,12 @@ public class TodoDTO {
   private String title;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  @Future
   private LocalDate dueDate;
 
   @NotBlank
   private String writer;
+
   private boolean finished;
 
 }

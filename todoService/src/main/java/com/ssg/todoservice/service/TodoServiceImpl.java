@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.apache.ibatis.logging.LogFactory;
+
+import javax.annotation.PostConstruct;
 
 @Service
 @RequiredArgsConstructor
@@ -20,17 +23,18 @@ public class TodoServiceImpl implements TodoService{
   private final TodoMapper todoMapper;
   private final ModelMapper modelMapper;
 
+  @PostConstruct
+  public void forceMyBatisLog4j2() {
+    System.out.println(">>> Forcing MyBatis to use Log4j2");
+    LogFactory.useLog4J2Logging();
+  }
+
   @Override
   public void register(TodoDTO todoDTO) {
     TodoVO todoVO = modelMapper.map(todoDTO, TodoVO.class);
     todoMapper.insert(todoVO);
   }
 
-  @Override
-  public List<TodoDTO> listTodos(PageRequestDTO pageRequestDTO) {
-    List<TodoVO> voList = todoMapper.findAll(pageRequestDTO);
-    return voList.stream().map(vo -> modelMapper.map(vo, TodoDTO.class)).collect(Collectors.toList());
-  }
 
   @Override
   public TodoDTO getOne(Long tno) {
@@ -50,10 +54,11 @@ public class TodoServiceImpl implements TodoService{
 
   @Override
   public PageResponseDTO<TodoDTO> getList(PageRequestDTO pageRequestDTO) {
-    List<TodoVO> voList = todoMapper.findAll(pageRequestDTO);
+    List<TodoVO> voList = todoMapper.findList(pageRequestDTO);
 
-    List<TodoDTO> dtoList = voList.stream().map(vo -> modelMapper.map(vo,TodoDTO.class)).collect(
-        Collectors.toList());
+    List<TodoDTO> dtoList = voList.stream()
+            .map(vo -> modelMapper.map(vo,TodoDTO.class))
+            .collect(Collectors.toList());
 
     int total = todoMapper.getCount(pageRequestDTO);
 

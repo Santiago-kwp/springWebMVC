@@ -32,9 +32,16 @@ public class TodoController {
   @GetMapping("/list")
   public void list(@Valid PageRequestDTO pageRequestDTO, BindingResult bindingResult, Model model) {
     log.info("pageRequestDTO: " + pageRequestDTO);
+    log.info("keyword: {}", pageRequestDTO.getKeyword());
+    log.info("types: {}", pageRequestDTO.getTypes());
+
     if (bindingResult.hasErrors()) {
       pageRequestDTO = PageRequestDTO.builder().build();
+      log.info("Error generated!! pageRequestDTO: " + pageRequestDTO);
+
     }
+    // ✅ normalize 호출 추가
+    pageRequestDTO.normalize();
 
     model.addAttribute("responseDTO", todoService.getList(pageRequestDTO));
   }
@@ -45,27 +52,30 @@ public class TodoController {
   }
 
   /** 등록 처리 */
-  @PostMapping
+  @PostMapping("/register")
   public String register(
       @ModelAttribute("todo") @Valid TodoDTO todo,
       BindingResult bindingResult,
       RedirectAttributes rttr
   ) {
+    log.info("POST todo register");
+
+    //  유효성 검사 오류 발생 시 Todo 등록 화면 리다이렉트
+    //  입력했던 데이터도 todoDTO에 저장하여 같이 전달한다.
+
     if (bindingResult.hasErrors()) {
-      return "register";
+      log.error("POST todo register has errors...");
+      rttr.addFlashAttribute("errors", bindingResult.getAllErrors());
+      return "redirect:/todo/register";
     }
 
-    try {
-      todoService.register(todo);
-    } catch (DuplicateKeyException e) {
-      // PK(mid) 중복 시 폼으로 되돌리기
-      bindingResult.rejectValue("tno", "duplicate", "이미 등록된 Todo입니다.");
-      return "register";
-    }
-
+    // 오류미 발생시 등록 성공처리 후 todo/list 로 리다이렉트
+    log.info(todo);
     // flash 라서 한번만 뜸
     rttr.addFlashAttribute("msg", "Todo가 등록되었습니다.");
+    todoService.register(todo);
     return "redirect:/todo/list";
+
   }
 
   @GetMapping({"/read", "/modify"})
@@ -87,16 +97,17 @@ public class TodoController {
   @PostMapping("/modify")
   public String modify(@Valid TodoDTO todoDTO,
                        BindingResult bindingResult,
-                       RedirectAttributes redirectAttributes) {
+                       RedirectAttributes rttr) {
+
     if (bindingResult.hasErrors()) {
       log.info("has errors.......");
-      redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-      redirectAttributes.addAttribute("tno", todoDTO.getTno());
+      rttr.addFlashAttribute("errors", bindingResult.getAllErrors());
+      rttr.addAttribute("tno", todoDTO.getTno());
       return "redirect:/todo/modify";
     }
     log.info(todoDTO);
     todoService.modify(todoDTO);
-    redirectAttributes.addFlashAttribute("msg", todoDTO.getTitle() + " Todo가 수정되었습니다.");
+    rttr.addFlashAttribute("msg", todoDTO.getTitle() + " Todo가 수정되었습니다.");
     return "redirect:/todo/list";
   }
 

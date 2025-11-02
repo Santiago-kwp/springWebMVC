@@ -13,7 +13,7 @@
 	<title>SB Admin 2 - Dashboard</title>
 
 	<!-- Custom fonts for this template-->
-	<link href="/resources/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+	<link href="/resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 	<link
 			href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
 			rel="stylesheet">
@@ -81,7 +81,7 @@
 				<span>Utilities</span>
 			</a>
 			<div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-			     data-parent="#accordionSidebar">
+				 data-parent="#accordionSidebar">
 				<div class="bg-white py-2 collapse-inner rounded">
 					<h6 class="collapse-header">Custom Utilities:</h6>
 					<a class="collapse-item" href="utilities-color.html">Colors</a>
@@ -172,7 +172,7 @@
 						class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
 					<div class="input-group">
 						<input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-						       aria-label="Search" aria-describedby="basic-addon2">
+							   aria-label="Search" aria-describedby="basic-addon2">
 						<div class="input-group-append">
 							<button class="btn btn-primary" type="button">
 								<i class="fas fa-search fa-sm"></i>
@@ -192,12 +192,12 @@
 						</a>
 						<!-- Dropdown - Messages -->
 						<div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-						     aria-labelledby="searchDropdown">
+							 aria-labelledby="searchDropdown">
 							<form class="form-inline mr-auto w-100 navbar-search">
 								<div class="input-group">
 									<input type="text" class="form-control bg-light border-0 small"
-									       placeholder="Search for..." aria-label="Search"
-									       aria-describedby="basic-addon2">
+										   placeholder="Search for..." aria-label="Search"
+										   aria-describedby="basic-addon2">
 									<div class="input-group-append">
 										<button class="btn btn-primary" type="button">
 											<i class="fas fa-search fa-sm"></i>
@@ -218,7 +218,7 @@
 						</a>
 						<!-- Dropdown - Alerts -->
 						<div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-						     aria-labelledby="alertsDropdown">
+							 aria-labelledby="alertsDropdown">
 							<h6 class="dropdown-header">
 								Alerts Center
 							</h6>
@@ -269,14 +269,14 @@
 						</a>
 						<!-- Dropdown - Messages -->
 						<div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-						     aria-labelledby="messagesDropdown">
+							 aria-labelledby="messagesDropdown">
 							<h6 class="dropdown-header">
 								Message Center
 							</h6>
 							<a class="dropdown-item d-flex align-items-center" href="#">
 								<div class="dropdown-list-image mr-3">
-									<img class="rounded-circle" src="/resources/img/undraw_profile_1.svg"
-									     alt="...">
+									<img class="rounded-circle" src="img/undraw_profile_1.svg"
+										 alt="...">
 									<div class="status-indicator bg-success"></div>
 								</div>
 								<div class="font-weight-bold">
@@ -287,8 +287,8 @@
 							</a>
 							<a class="dropdown-item d-flex align-items-center" href="#">
 								<div class="dropdown-list-image mr-3">
-									<img class="rounded-circle" src="/resources/img/undraw_profile_2.svg"
-									     alt="...">
+									<img class="rounded-circle" src="img/undraw_profile_2.svg"
+										 alt="...">
 									<div class="status-indicator"></div>
 								</div>
 								<div>
@@ -299,8 +299,8 @@
 							</a>
 							<a class="dropdown-item d-flex align-items-center" href="#">
 								<div class="dropdown-list-image mr-3">
-									<img class="rounded-circle" src="/resources/img/undraw_profile_3.svg"
-									     alt="...">
+									<img class="rounded-circle" src="img/undraw_profile_3.svg"
+										 alt="...">
 									<div class="status-indicator bg-warning"></div>
 								</div>
 								<div>
@@ -312,7 +312,7 @@
 							<a class="dropdown-item d-flex align-items-center" href="#">
 								<div class="dropdown-list-image mr-3">
 									<img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-									     alt="...">
+										 alt="...">
 									<div class="status-indicator bg-success"></div>
 								</div>
 								<div>
@@ -333,11 +333,11 @@
 						   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							<span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
 							<img class="img-profile rounded-circle"
-							     src="/resources/img/undraw_profile.svg">
+								 src="img/undraw_profile.svg">
 						</a>
 						<!-- Dropdown - User Information -->
 						<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-						     aria-labelledby="userDropdown">
+							 aria-labelledby="userDropdown">
 							<a class="dropdown-item" href="#">
 								<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
 								Profile
@@ -362,3 +362,6 @@
 
 			</nav>
 			<!-- End of Topbar -->
+
+			<!-- Begin Page Content -->
+			<div class="container-fluid">

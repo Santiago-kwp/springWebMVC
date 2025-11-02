@@ -7,22 +7,36 @@
     </Console>
   </Appenders>
 
-  <Loggers>
-<!--    <logger name="org.springframework" level="INFO" additivity="false">-->
-<!--      <appender-ref ref="console"/>-->
-<!--    </logger>-->
+    <Loggers>
+        <!-- MyBatis SQL 실행 로그 -->
+        <Logger name="org.apache.ibatis.executor.statement" level="debug" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
 
-<!--    <logger name="com.ssg" level="INFO" additivity="false">-->
-<!--      <appender-ref ref="console"/>-->
-<!--    </logger>-->
+        <Logger name="org.apache.ibatis.executor" level="debug" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
 
-<!--    <logger name="com.ssg.todoservice.mapper" level="TRACE" additivity="false">-->
-<!--      <appender-ref ref="console"/>-->
-<!--    </logger>-->
+        <!-- 기존 로거들 유지 -->
+        <Logger name="org.apache.ibatis" level="debug" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
 
-    <Root level="INFO" additivity="false">
-      <AppenderRef ref="CONSOLE"/>
-    </Root>
-  </Loggers>
+        <Logger name="org.mybatis" level="debug" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
 
+        <Logger name="org.apache.ibatis.logging" level="debug" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
+
+        <Logger name="org.apache.ibatis.logging.jdbc" level="debug" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
+
+
+        <Root level="debug">
+            <AppenderRef ref="CONSOLE"/>
+        </Root>
+    </Loggers>
 </Configuration>

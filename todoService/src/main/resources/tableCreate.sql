@@ -12,3 +12,10 @@ create table tbl_todo (
 );
 
 select * from tbl_todo;
+
+
+INSERT INTO tbl_todo (title, dueDate, writer, finished)
+SELECT CONCAT(title, ' 복사본'), DATE_ADD(dueDate, INTERVAL 1 DAY), writer, finished FROM tbl_todo;
+
+-- 결과 확인
+SELECT * FROM tbl_todo order by tno desc;

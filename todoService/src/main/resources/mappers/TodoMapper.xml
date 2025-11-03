@@ -60,16 +60,41 @@
 
   <sql id="search">
     <where>
-      <if test="keyword != null and keyword.trim() != '' and types != null">
-        <trim prefix="(" suffix=")" suffixOverrides="OR">
-          <foreach collection="types" item="type">
-            <choose>
-              <when test="'t'.equals(type)"> title LIKE CONCAT('%', #{keyword}, '%') OR </when>
-              <when test="'w'.equals(type)"> writer LIKE CONCAT('%', #{keyword}, '%') OR </when>
-            </choose>
-          </foreach>
-        </trim>
+<!--      작동 안함-->
+<!--      <if test="keyword != null and keyword.trim() != '' and types != null">-->
+<!--        <trim prefix="(" suffix=")" suffixOverrides="OR">-->
+<!--          <foreach collection="types" item="type">-->
+<!--            <choose>-->
+<!--              <when test="'t'.equals(type)"> title LIKE CONCAT('%', #{keyword}, '%') OR </when>-->
+<!--              <when test="'w'.equals(type)"> writer LIKE CONCAT('%', #{keyword}, '%') OR </when>-->
+<!--            </choose>-->
+<!--          </foreach>-->
+<!--        </trim>-->
+<!--      </if>-->
+
+      <!--      잘 작동힘-->
+      <if test="types != null and types.size() > 0 and keyword != null and keyword != ''">
+        <foreach collection="types" item="type" open="(" close=")" separator=" OR ">
+          <if test="type == 't'.toString()">
+            title LIKE CONCAT('%', #{keyword}, '%')
+          </if>
+          <if test="type == 'w'.toString()">
+            writer LIKE CONCAT('%', #{keyword}, '%')
+          </if>
+        </foreach>
       </if>
+
+<!--      잘 작동함-->
+<!--      <if test="types != null and types.size()">-->
+<!--        <foreach collection="types" item="type" open="(" close=") " separator=" OR ">-->
+<!--          <if test="type == 't'.toString()">-->
+<!--            title like concat('%', #{keyword},'%')-->
+<!--          </if>-->
+<!--          <if test="type == 'w'.toString()">-->
+<!--            writer like concat('%', #{keyword},'%')-->
+<!--          </if>-->
+<!--        </foreach>-->
+<!--      </if>-->
 
       <if test="finished != null and finished == true">
         AND finished = TRUE
@@ -125,10 +150,6 @@
     select count(tno) from tbl_todo
     <include refid="search"/>
   </select>
-
-
-
-
 
 
 </mapper>

@@ -1,6 +1,9 @@
 package com.ssg.boardservice.controller;
 
 
+import com.ssg.boardservice.domain.BoardVO;
+import com.ssg.boardservice.domain.Criteria;
+import com.ssg.boardservice.domain.PageDTO;
 import com.ssg.boardservice.dto.BoardDTO;
 import com.ssg.boardservice.dto.BoardRegisterDTO;
 import com.ssg.boardservice.service.BoardService;
@@ -8,7 +11,9 @@ import java.io.IOException;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.dao.DuplicateKeyException;import org.springframework.stereotype.Controller;
+import java.util.List;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +29,21 @@ public class BoardController {
   private final BoardService boardService;
 
   @RequestMapping("/list")
-  public void list(Model model) {
-    log.info("board list");
-    model.addAttribute("boards", boardService.listBoard());
+  public void list(@ModelAttribute("cri") Criteria criteria,
+      Model model) {
+    log.info("list................");
+    log.info("criteria: " + criteria);
+
+    List<BoardDTO> list = boardService.getList(criteria);
+
+    log.info(list);
+    log.info("리스트 출력");
+
+    model.addAttribute("boards", list);
+
+    PageDTO pageDTO = new PageDTO(criteria, boardService.getTotal(criteria));
+
+    model.addAttribute("pageMaker", pageDTO);
   }
 
   // 등록 폼 페이지
@@ -53,7 +70,7 @@ public class BoardController {
     try {
       boardService.create(boardRegisterDTO); // BoardRegisterDTO 전달
     } catch (DuplicateKeyException e) {
-      bindingResult.rejectValue("bId", "duplicate", "이미 등록된 게시글입니다."); // bId 필드가 없으므로, 다른 필드나 글로벌 오류로 처리
+      bindingResult.rejectValue("bno", "duplicate", "이미 등록된 게시글입니다."); // bno 필드가 없으므로, 다른 필드나 글로벌 오류로 처리
       log.error("Duplicate key error: " + e.getMessage());
       return "board/register";
     } catch (IOException e) {
@@ -65,20 +82,37 @@ public class BoardController {
     return "redirect:/board/list";
   }
 
-  @GetMapping("/read/{bId}")
-  public String read(@PathVariable("bId") Long bId, Model model) {
-    BoardDTO dto = boardService.getBoard(bId);
-    log.info(dto);
-    model.addAttribute("dto", dto);
-    return "board/read"; // JSP 경로에 따라 수정
+  @GetMapping({"/{job}/{bno}"})
+  public String read(
+      @PathVariable(name = "job") String job,
+      @PathVariable(name = "bno") Long bno,
+      @ModelAttribute("cri") Criteria criteria,
+      Model model) {
+
+    log.info("job: " + job);
+    log.info("bno: " + bno);
+
+    if (!(job.equals("read") || job.equals("modify"))) {
+      throw new RuntimeException("Bad Request job");
+    }
+
+    BoardDTO boardDTO = boardService.getBoard(bno);
+
+    log.info("boardDTO: " + boardDTO);
+
+    model.addAttribute("dto", boardDTO);
+
+    return "/board/" + job;
+
   }
 
 
+
   @PostMapping("/remove")
-  public String remove(Long bId, RedirectAttributes redirectAttributes) {
+  public String remove(Long bno, RedirectAttributes redirectAttributes) {
     log.info("-------------remove------------------");
-    boardService.remove(bId);
-    log.info("bId: " + bId);
+    boardService.remove(bno);
+    log.info("bno: " + bno);
     redirectAttributes.addFlashAttribute("msg", "Board가 삭제되었습니다.");
     return "redirect:/board/list";
   }
@@ -90,7 +124,7 @@ public class BoardController {
     if (bindingResult.hasErrors()) {
       log.info("has errors.......");
       redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-      redirectAttributes.addAttribute("bId", todoDTO.getBId());
+      redirectAttributes.addAttribute("bno", todoDTO.getBno());
       return "redirect:/board/modify";
     }
 

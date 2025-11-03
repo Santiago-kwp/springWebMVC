@@ -8,7 +8,7 @@
 
   <!--  받고자하는 데이터 지정-->
   <resultMap id="BoardResultMap" type="com.ssg.boardservice.domain.BoardVO">
-    <id property="bId"    column="bId"/>
+    <id property="bno"    column="bno"/>
     <result property="title"   column="title"/>
     <result property="content"   column="content"/>
     <result property="writer"  column="writer" />
@@ -20,30 +20,67 @@
     <result property="hits"  column="hits" />
   </resultMap>
 
+  <sql id="search">
+    <if test="(types != null and keyword != null)">
+      <foreach collection="types" item="type" open=" and ( " separator="OR" close=")">
+        <choose>
+          <when test='type.equals("T")'>
+            title like concat('%',#{keyword},'%')
+          </when>
+          <when test='type.equals("C")'>
+            content like concat('%',#{keyword},'%')
+          </when>
+          <when test='type.equals("W")'>
+            writer like concat('%',#{keyword},'%')
+          </when>
+        </choose>
+      </foreach>
+    </if>
+  </sql>
+
+
+  <select id="getPage" resultType="BoardVO">
+    select * from
+    board
+    where bno > 0
+    <include refid="search"/>
+    order by bno desc
+    limit #{skip}, #{amount}
+  </select>
+
+  <select id="getTotal" resultType="int">
+    select count(bno)
+    from
+    board
+    where bno > 0
+    <include refid="search"/>
+  </select>
+
+
   <insert id="insert" parameterType="com.ssg.boardservice.domain.BoardVO"
-    useGeneratedKeys="true" keyProperty="bId"> INSERT INTO board (title, content, writer, password, file_path, original_file_name)
+    useGeneratedKeys="true" keyProperty="bno"> INSERT INTO board (title, content, writer, password, file_path, original_file_name)
     VALUES (#{title}, #{content}, #{writer}, #{password}, #{filePath}, #{originalFileName})
   </insert>
 
-  <select id="findAll" resultMap="BoardResultMap">
-    SELECT * FROM board ORDER BY bId DESC
+  <select id="getList" resultMap="BoardResultMap">
+    SELECT * FROM board ORDER BY bno DESC
   </select>
 
   <select id="findById" parameterType="long" resultMap="BoardResultMap">
-    SELECT * FROM board WHERE bId = #{bId}
+    SELECT * FROM board WHERE bno = #{bno}
   </select>
 
   <delete id="delete">
-    delete from board where bId = #{bId}
+    delete from board where bno = #{bno}
   </delete>
 
   <update id="update">
     update board set title = #{title} , content= #{content},
-    file_path = #{filePath}, original_file_name = #{originalFileName} where bId = #{bId}
+    file_path = #{filePath}, original_file_name = #{originalFileName} where bno = #{bno}
   </update>
 
   <update id="increaseHits" parameterType="long">
-    UPDATE board SET hits = hits + 1 WHERE bId = #{bId}
+    UPDATE board SET hits = hits + 1 WHERE bno = #{bno}
   </update>
 
 

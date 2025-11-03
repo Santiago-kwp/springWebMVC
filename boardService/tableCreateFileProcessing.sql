@@ -3,7 +3,7 @@ use sqldb;
 drop table if exists board;
 
 create table board(
-                      bId bigint auto_increment primary key ,
+                      bno bigint auto_increment primary key ,
                       title varchar(30) not null,
                       writer varchar(30) not null,
                       content text null ,
@@ -21,3 +21,5 @@ ALTER TABLE board alter column hits set default 0;
 -- 1. 기존 BLOB 컬럼 제거
 ALTER TABLE board DROP COLUMN file;
 
+
+select * from board;

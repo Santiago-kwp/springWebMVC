@@ -1,493 +1,229 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: a
-  Date: 2025-10-30
-  Time: 오후 3:11
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page isELIgnored="false" %>
-<html>
-<head>
-	<title>게시판 리스트</title>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="<c:url value='/resources/css/sb-admin-2.css' />">
-	<!-- Custom fonts for this template -->
-	<link href="<c:url value='/resources/vendor/fontawesome-free/css/all.min.css' />" rel="stylesheet" type="text/css">
-	<link
-			href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-			rel="stylesheet">
+
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%@include file="../includes/header.jsp"%>
 
 
-	<!-- Custom styles for this page -->
-	<link href="${pageContext.request.contextPath}/resources/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">Tables</h1>
+<p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
+	For more information about DataTables, please visit the <a target="_blank"
+	                                                           href="https://datatables.net">official DataTables documentation</a>.</p>
 
-</head>
-<body id="page-top">
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+	<div class="card-header py-3">
+		<h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+	</div>
+	<div class="card-body">
 
-<!-- Page Wrapper -->
-<div id="wrapper">
-
-	<!-- Sidebar -->
-	<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-		<!-- Sidebar - Brand -->
-		<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-			<div class="sidebar-brand-icon rotate-n-15">
-				<i class="fas fa-laugh-wink"></i>
-			</div>
-			<div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
-		</a>
-
-		<!-- Divider -->
-		<hr class="sidebar-divider my-0">
-
-		<!-- Nav Item - Dashboard -->
-		<li class="nav-item">
-			<a class="nav-link" href="index.html">
-				<i class="fas fa-fw fa-tachometer-alt"></i>
-				<span>Dashboard</span></a>
-		</li>
-
-		<!-- Divider -->
-		<hr class="sidebar-divider">
-
-		<!-- Heading -->
-		<div class="sidebar-heading">
-			Interface
+		<div class="float-right d-flex justify-content-start" style="margin-bottom: 2em">
+			<select name='typeSelect' class="form-select form-control">
+				<option value="" >--</option>
+				<option value="T" ${cri.typeStr == 'T' ? 'selected' : '' }>제목</option>
+				<option value="C" ${cri.typeStr == 'C' ? 'selected' : '' }>내용</option>
+				<option value="W" ${cri.typeStr == 'W' ? 'selected' : '' }>작성자</option>
+				<option value="TC" ${cri.typeStr == 'TC' ? 'selected' : '' }>제목 OR 내용</option>
+				<option value="TW" ${cri.typeStr == 'TW' ? 'selected' : '' } >제목 OR 작성자</option>
+				<option value="TCW" ${cri.typeStr == 'TCW' ? 'selected' : '' }>제목 OR 내용 OR 작성자</option>
+			</select>
+			<input type='text' class="form-control"  name='keywordInput' value="<c:out value="${cri.keyword}"/>" />
+			<button class='btn btn-outline-info searchBtn'>Search</button>
 		</div>
 
-		<!-- Nav Item - Pages Collapse Menu -->
-		<li class="nav-item">
-			<a class="nav-link collapsed" href="/board/list" data-toggle="collapse" data-target="#collapseTwo"
-			   aria-expanded="true" aria-controls="collapseTwo">
-				<i class="fas fa-fw fa-cog"></i>
-				<span>Components</span>
-			</a>
-			<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-				<div class="bg-white py-2 collapse-inner rounded">
-					<h6 class="collapse-header">Custom Components:</h6>
-					<a class="collapse-item" href="buttons.html">Buttons</a>
-					<a class="collapse-item" href="cards.html">Cards</a>
-				</div>
-			</div>
-		</li>
+		<div class="table-responsive">
 
-		<!-- Nav Item - Utilities Collapse Menu -->
-		<li class="nav-item">
-			<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-			   aria-expanded="true" aria-controls="collapseUtilities">
-				<i class="fas fa-fw fa-wrench"></i>
-				<span>Utilities</span>
-			</a>
-			<div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-			     data-parent="#accordionSidebar">
-				<div class="bg-white py-2 collapse-inner rounded">
-					<h6 class="collapse-header">Custom Utilities:</h6>
-					<a class="collapse-item" href="utilities-color.html">Colors</a>
-					<a class="collapse-item" href="utilities-border.html">Borders</a>
-					<a class="collapse-item" href="utilities-animation.html">Animations</a>
-					<a class="collapse-item" href="utilities-other.html">Other</a>
-				</div>
-			</div>
-		</li>
+			<form id="actionForm" method="get" action="/board/list">
+				<input type="hidden" name="pageNum" value="${cri.pageNum}">
+				<input type="hidden" name="amount" value="${cri.amount}">
+				<c:if test="${cri.types != null && cri.keyword != null }">
+					<c:forEach var="type" items="${cri.types}">
+						<input type="hidden" name="types" value="${type}">
+					</c:forEach>
+					<input type="hidden" name="keyword" value="<c:out value="${cri.keyword}"/>">
+				</c:if>
+			</form>
 
-		<!-- Divider -->
-		<hr class="sidebar-divider">
+			<table class="table table-bordered" id="dataTable" >
+				<thead>
+				<tr>
+					<th>BId</th>
+					<th>Title</th>
+					<th>Writer</th>
+					<th>RegDate</th>
+					<th>UpdateDate</th>
+					<th>Hits</th>
+					<th>File(Y/N)</th>
+				</tr>
+				</thead>
+				<tbody class="tbody">
 
-		<!-- Heading -->
-		<div class="sidebar-heading">
-			Addons
-		</div>
+				<c:forEach var="board" items="${list}">
 
-		<!-- Nav Item - Pages Collapse Menu -->
-		<li class="nav-item">
-			<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-			   aria-expanded="true" aria-controls="collapsePages">
-				<i class="fas fa-fw fa-folder"></i>
-				<span>Pages</span>
-			</a>
-			<div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-				<div class="bg-white py-2 collapse-inner rounded">
-					<h6 class="collapse-header">Login Screens:</h6>
-					<a class="collapse-item" href="login.html">Login</a>
-					<a class="collapse-item" href="register.html">Register</a>
-					<a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-					<div class="collapse-divider"></div>
-					<h6 class="collapse-header">Other Pages:</h6>
-					<a class="collapse-item" href="404.html">404 Page</a>
-					<a class="collapse-item" href="blank.html">Blank Page</a>
-				</div>
-			</div>
-		</li>
+					<tr data-bId="${board.getBId()}" >
+						<td><c:out value="${board.getBId()}"/></td>
+						<td><c:out value="${board.title}"/></td>
+						<td><c:out value="${board.writer}"/></td>
+						<td><c:out value="${board.regStr}"/></td>
+						<td><c:out value="${board.updateStr}"/></td>
+						<td>${board.hits}</td>
+						<td>
+								${not empty board.filePath ? '✅ 첨부 있음' : '❌ 첨부 없음'}
+						</td>
+					</tr>
 
-		<!-- Nav Item - Charts -->
-		<li class="nav-item">
-			<a class="nav-link" href="charts.html">
-				<i class="fas fa-fw fa-chart-area"></i>
-				<span>Charts</span></a>
-		</li>
+				</c:forEach>
 
-		<!-- Nav Item - Tables -->
-		<li class="nav-item active">
-			<a class="nav-link" href="tables.html">
-				<i class="fas fa-fw fa-table"></i>
-				<span>Tables</span></a>
-		</li>
+				</tbody>
+			</table>
 
-		<!-- Divider -->
-		<hr class="sidebar-divider d-none d-md-block">
+			<div class="float-right">
 
-		<!-- Sidebar Toggler (Sidebar) -->
-		<div class="text-center d-none d-md-inline">
-			<button class="rounded-circle border-0" id="sidebarToggle"></button>
-		</div>
+				<ul class="pagination">
 
-	</ul>
-	<!-- End of Sidebar -->
+					<c:if test="${pageMaker.prev}">
+						<li class="page-item">
+							<a class="page-link" href="${pageMaker.startPage - 1}" tabindex="-1">Previous</a>
+						</li>
+					</c:if>
+					<c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="num">
+						<li class="page-item ${cri.pageNum == num ? 'active':''} ">
+							<a class="page-link" href="${num}"> ${num} </a>
+						</li>
+					</c:forEach>
 
-	<!-- Content Wrapper -->
-	<div id="content-wrapper" class="d-flex flex-column">
-
-		<!-- Main Content -->
-		<div id="content">
-
-			<!-- Topbar -->
-			<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-				<!-- Sidebar Toggle (Topbar) -->
-				<form class="form-inline">
-					<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-						<i class="fa fa-bars"></i>
-					</button>
-				</form>
-
-				<!-- Topbar Search -->
-				<form
-						class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-					<div class="input-group">
-						<input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-						       aria-label="Search" aria-describedby="basic-addon2">
-						<div class="input-group-append">
-							<button class="btn btn-primary" type="button">
-								<i class="fas fa-search fa-sm"></i>
-							</button>
-						</div>
-					</div>
-				</form>
-
-				<!-- Topbar Navbar -->
-				<ul class="navbar-nav ml-auto">
-
-					<!-- Nav Item - Search Dropdown (Visible Only XS) -->
-					<li class="nav-item dropdown no-arrow d-sm-none">
-						<a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-						   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<i class="fas fa-search fa-fw"></i>
-						</a>
-						<!-- Dropdown - Messages -->
-						<div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-						     aria-labelledby="searchDropdown">
-							<form class="form-inline mr-auto w-100 navbar-search">
-								<div class="input-group">
-									<input type="text" class="form-control bg-light border-0 small"
-									       placeholder="Search for..." aria-label="Search"
-									       aria-describedby="basic-addon2">
-									<div class="input-group-append">
-										<button class="btn btn-primary" type="button">
-											<i class="fas fa-search fa-sm"></i>
-										</button>
-									</div>
-								</div>
-							</form>
-						</div>
-					</li>
-
-					<!-- Nav Item - Alerts -->
-					<li class="nav-item dropdown no-arrow mx-1">
-						<a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-						   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<i class="fas fa-bell fa-fw"></i>
-							<!-- Counter - Alerts -->
-							<span class="badge badge-danger badge-counter">3+</span>
-						</a>
-						<!-- Dropdown - Alerts -->
-						<div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-						     aria-labelledby="alertsDropdown">
-							<h6 class="dropdown-header">
-								Alerts Center
-							</h6>
-							<a class="dropdown-item d-flex align-items-center" href="#">
-								<div class="mr-3">
-									<div class="icon-circle bg-primary">
-										<i class="fas fa-file-alt text-white"></i>
-									</div>
-								</div>
-								<div>
-									<div class="small text-gray-500">December 12, 2019</div>
-									<span class="font-weight-bold">A new monthly report is ready to download!</span>
-								</div>
-							</a>
-							<a class="dropdown-item d-flex align-items-center" href="#">
-								<div class="mr-3">
-									<div class="icon-circle bg-success">
-										<i class="fas fa-donate text-white"></i>
-									</div>
-								</div>
-								<div>
-									<div class="small text-gray-500">December 7, 2019</div>
-									$290.29 has been deposited into your account!
-								</div>
-							</a>
-							<a class="dropdown-item d-flex align-items-center" href="#">
-								<div class="mr-3">
-									<div class="icon-circle bg-warning">
-										<i class="fas fa-exclamation-triangle text-white"></i>
-									</div>
-								</div>
-								<div>
-									<div class="small text-gray-500">December 2, 2019</div>
-									Spending Alert: We've noticed unusually high spending for your account.
-								</div>
-							</a>
-							<a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-						</div>
-					</li>
-
-					<!-- Nav Item - Messages -->
-					<li class="nav-item dropdown no-arrow mx-1">
-						<a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-						   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<i class="fas fa-envelope fa-fw"></i>
-							<!-- Counter - Messages -->
-							<span class="badge badge-danger badge-counter">7</span>
-						</a>
-						<!-- Dropdown - Messages -->
-						<div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-						     aria-labelledby="messagesDropdown">
-							<h6 class="dropdown-header">
-								Message Center
-							</h6>
-							<a class="dropdown-item d-flex align-items-center" href="#">
-								<div class="dropdown-list-image mr-3">
-									<img class="rounded-circle" src="${pageContext.request.contextPath}/resources/img/undraw_profile_1.svg"
-									     alt="...">
-									<div class="status-indicator bg-success"></div>
-								</div>
-								<div class="font-weight-bold">
-									<div class="text-truncate">Hi there! I am wondering if you can help me with a
-										problem I've been having.</div>
-									<div class="small text-gray-500">Emily Fowler · 58m</div>
-								</div>
-							</a>
-							<a class="dropdown-item d-flex align-items-center" href="#">
-								<div class="dropdown-list-image mr-3">
-									<img class="rounded-circle" src="${pageContext.request.contextPath}/resources/img/undraw_profile_2.svg"
-									     alt="...">
-									<div class="status-indicator"></div>
-								</div>
-								<div>
-									<div class="text-truncate">I have the photos that you ordered last month, how
-										would you like them sent to you?</div>
-									<div class="small text-gray-500">Jae Chun · 1d</div>
-								</div>
-							</a>
-							<a class="dropdown-item d-flex align-items-center" href="#">
-								<div class="dropdown-list-image mr-3">
-									<img class="rounded-circle" src="${pageContext.request.contextPath}/resources/img/undraw_profile_3.svg"
-									     alt="...">
-									<div class="status-indicator bg-warning"></div>
-								</div>
-								<div>
-									<div class="text-truncate">Last month's report looks great, I am very happy with
-										the progress so far, keep up the good work!</div>
-									<div class="small text-gray-500">Morgan Alvarez · 2d</div>
-								</div>
-							</a>
-							<a class="dropdown-item d-flex align-items-center" href="#">
-								<div class="dropdown-list-image mr-3">
-									<img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-									     alt="...">
-									<div class="status-indicator bg-success"></div>
-								</div>
-								<div>
-									<div class="text-truncate">Am I a good boy? The reason I ask is because someone
-										told me that people say this to all dogs, even if they aren't good...</div>
-									<div class="small text-gray-500">Chicken the Dog · 2w</div>
-								</div>
-							</a>
-							<a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
-						</div>
-					</li>
-
-					<div class="topbar-divider d-none d-sm-block"></div>
-
-					<!-- Nav Item - User Information -->
-					<li class="nav-item dropdown no-arrow">
-						<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-						   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-							<img class="img-profile rounded-circle"
-							     src="${pageContext.request.contextPath}/resources/img/undraw_profile.svg">
-						</a>
-						<!-- Dropdown - User Information -->
-						<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-						     aria-labelledby="userDropdown">
-							<a class="dropdown-item" href="#">
-								<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-								Profile
-							</a>
-							<a class="dropdown-item" href="#">
-								<i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-								Settings
-							</a>
-							<a class="dropdown-item" href="#">
-								<i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-								Activity Log
-							</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-								<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-								Logout
-							</a>
-						</div>
-					</li>
-
+					<c:if test="${pageMaker.next}">
+						<li class="page-item">
+							<a class="page-link" href="${pageMaker.endPage + 1}">Next</a>
+						</li>
+					</c:if>
 				</ul>
 
-			</nav>
-			<!-- End of Topbar -->
-
-			<!-- Begin Page Content -->
-			<div class="container-fluid">
-				<c:if test="${not empty msg}">
-					<div class="alert alert-success">${msg}</div>
-				</c:if>
-				<!-- Page Heading -->
-				<h1 class="h3 mb-2 text-gray-800">게시판</h1>
-				<p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
-					For more information about DataTables, please visit the official DataTables documentation</a>.</p>
-				<!-- DataTales Example -->
-				<div class="card shadow mb-4">
-					<div class="card-header py-3">
-						<a href="/board/register"><h6 class="m-0 font-weight-bold text-primary">게시글 작성하러 가기!</h6></a>
-					</div>
-					<div class="card-body">
-						<div class="table-responsive">
-							<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-								<thead>
-								<tr>
-									<th>제목</th>
-									<th>작성자</th>
-									<th>내용</th>
-									<th>조회수</th>
-									<th>파일여부</th>
-								</tr>
-								</thead>
-								<tfoot>
-								<tr>
-									<th>제목</th>
-									<th>작성자</th>
-									<th>내용</th>
-									<th>조회수</th>
-									<th>파일여부</th>
-								</tr>
-								</tfoot>
-								<tbody>
-								<c:forEach var="board" items="${boards}">
-									<tr>
-										<td>${board.title}</td>
-<%--										<td>--%>
-<%--											<a href="/board/read/${board.bId}">--%>
-<%--													${board.title}--%>
-<%--											</a>--%>
-<%--										</td>--%>
-										<script>
-											console.log("bId from JSP: ${board.bId}");
-										</script>
-<%--										<c:out value="${board.bId}" />--%>
-									<%--										<td><c:out value="${board.bId}" /></td>--%>
-										<td>${board.writer}</td>
-										<td>${board.content}</td>
-										<td>${board.hits}</td>
-										<td>
-												${not empty board.filePath ? '✅ 첨부 있음' : '❌ 첨부 없음'}
-										</td>
-									</tr>
-								</c:forEach>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-
 			</div>
-			<!-- /.container-fluid -->
-
 		</div>
-		<!-- End of Main Content -->
-
-		<!-- Footer -->
-		<footer class="sticky-footer bg-white">
-			<div class="container my-auto">
-				<div class="copyright text-center my-auto">
-					<span>Copyright &copy; Your Website 2020</span>
-				</div>
-			</div>
-		</footer>
-		<!-- End of Footer -->
-
 	</div>
-	<!-- End of Content Wrapper -->
-
 </div>
-<!-- End of Page Wrapper -->
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-	<i class="fas fa-angle-up"></i>
-</a>
-
-<!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
+<div id="myModal" class="modal" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-				<button class="close" type="button" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">×</span>
+				<h5 class="modal-title">Modal title</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+			<div class="modal-body">
+				<p>Modal body text goes here.</p>
+			</div>
 			<div class="modal-footer">
-				<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-				<a class="btn btn-primary" href="login.html">Logout</a>
+				<button type="button" class="btn btn-primary">Save changes</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
 </div>
 
-<!-- Bootstrap core JavaScript-->
-<script src="${pageContext.request.contextPath}/resources/vendor/jquery/jquery.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-<!-- Core plugin JavaScript-->
-<script src="${pageContext.request.contextPath}/resources/vendor/jquery-easing/jquery.easing.min.js"></script>
+<%@include file="../includes/footer.jsp"%>
 
-<!-- Custom scripts for all pages-->
-<script src="${pageContext.request.contextPath}/resources/js/sb-admin-2.min.js"></script>
+<script>
 
-<!-- Page level plugins -->
-<script src="${pageContext.request.contextPath}/resources/vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+  const result = '${result}'
 
-<!-- Page level custom scripts -->
-<script src="${pageContext.request.contextPath}/resources/js/demo/datatables-demo.js"></script>
+  const myModal = new bootstrap.Modal(document.getElementById('myModal'))
 
-</body>
+  console.log(myModal)
 
-</html>
+  if(result){
+    myModal.show()
+  }
+
+  const actionForm = document.querySelector("#actionForm")
+
+  document.querySelector('.tbody').addEventListener("click", (e) => {
+
+    const target = e.target.closest("tr")
+    const bId = target.dataset.bId
+
+    const before = document.querySelector("#clonedActionForm")
+
+    if(before){
+      before.remove()
+    }
+
+    const clonedActionForm = actionForm.cloneNode(true)
+    clonedActionForm.setAttribute("action",`/board/read/\${bId}`)
+    clonedActionForm.setAttribute("id", "clonedActionForm")
+    console.log(clonedActionForm)
+
+    document.body.append(clonedActionForm)
+
+    clonedActionForm.submit()
+
+  },false)
+
+  document.querySelector(".pagination").addEventListener("click", (e) => {
+
+    e.preventDefault()
+    const target = e.target
+    console.log(target)
+
+    const targetPage = target.getAttribute("href")
+    console.log(targetPage)
+
+    actionForm.setAttribute("action","/board/list")
+    actionForm.querySelector("input[name='pageNum']").value = targetPage
+    actionForm.submit()
+
+
+  },false)
+
+  document.querySelector(".searchBtn").addEventListener("click",(e)=> {
+    e.preventDefault()
+    e.stopPropagation()
+
+    const selectObj = document.querySelector("select[name='typeSelect']")
+
+    const selectValue  = selectObj.options[selectObj.selectedIndex].value
+
+    console.log("selectValue---------------------")
+    console.log(selectValue) //T, TCW
+
+    const arr = selectValue.split("")
+
+    console.log(arr)
+
+    //actionForm에 hidden태그로 만들어서 검색 조건 추가
+    //페이지 번호도 1페이지로
+    //amount도 새로 만들자.
+
+    let str = ''
+
+    str = `<input type='hidden' name='pageNum' value=1>`
+    str += `<input type='hidden' name='amount' value=${cri.amount}>`
+
+    if(arr && arr.length > 0){
+      for (const type of arr) {
+        str += `<input type='hidden' name='types' value=\${type}>`
+      }
+    }
+    const keywordValue = document.querySelector("input[name='keywordInput']").value
+    str += `<input type='hidden' name='keyword' value='\${keywordValue}'>`
+
+    actionForm.innerHTML = str
+
+    //console.log(str)
+
+    actionForm.submit()
+
+  },false)
+
+
+</script>
+
+<%@include file="../includes/end.jsp"%>

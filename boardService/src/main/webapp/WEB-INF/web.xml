@@ -6,7 +6,7 @@
 
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>/WEB-INF/spring/root-context.xml</param-value>
+    <param-value>/WEB-INF/spring/root-context_old.xml</param-value>
   </context-param>
 
   <listener>
@@ -18,7 +18,7 @@
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
     <init-param>
       <param-name>contextConfigLocation</param-name>
-      <param-value>WEB-INF/spring/servlet-context.xml</param-value>
+      <param-value>/WEB-INF/spring/servlet-context_old.xml</param-value>
     </init-param>
 
     <init-param>

@@ -2,6 +2,7 @@ package com.ssg.boardservice.service;
 
 
 import com.ssg.boardservice.domain.BoardVO;
+import com.ssg.boardservice.domain.Criteria;
 import com.ssg.boardservice.dto.BoardDTO;
 import com.ssg.boardservice.dto.BoardRegisterDTO;
 import com.ssg.boardservice.mapper.BoardMapper;
@@ -26,6 +27,16 @@ public class BoardServiceImpl implements BoardService{
   private final BoardMapper boardMapper;
   private final ModelMapper modelMapper;
   private final FileService fileService;
+
+  public List<BoardDTO> getList(Criteria criteria){
+    return boardMapper.getPage(criteria).stream()
+        .map(vo -> modelMapper.map(vo, BoardDTO.class)).collect(Collectors.toList());
+  }
+
+  public int getTotal(Criteria criteria){
+
+    return boardMapper.getTotal(criteria);
+  }
 
   // 게시글 등록
   public void create(BoardRegisterDTO dto) throws IOException {
@@ -55,19 +66,15 @@ public class BoardServiceImpl implements BoardService{
 
   @Override
   @Transactional
-  public BoardDTO getBoard(Long bId) {
-    boardMapper.increaseHits(bId); // 조회수 증가
-    return modelMapper.map(boardMapper.findById(bId), BoardDTO.class); // 게시글 조회
+  public BoardDTO getBoard(Long bno) {
+    boardMapper.increaseHits(bno); // 조회수 증가
+    return modelMapper.map(boardMapper.findById(bno), BoardDTO.class); // 게시글 조회
   }
 
-  @Override
-  public List<BoardDTO> listBoard() {
-    return boardMapper.findAll().stream().map(vo -> modelMapper.map(vo, BoardDTO.class)).collect(Collectors.toList());
-  }
 
   @Override
-  public void remove(Long bId) {
-    boardMapper.delete(bId);
+  public void remove(Long bno) {
+    boardMapper.delete(bno);
   }
 
   @Override

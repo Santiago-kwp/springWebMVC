@@ -1,13 +1,21 @@
 package com.ssg.boardservice.mapper;
 
-import com.ssg.boardservice.domain.BoardVO;import java.util.List;public interface BoardMapper {
+import com.ssg.boardservice.domain.BoardVO;
+import com.ssg.boardservice.domain.Criteria;
+import java.util.List;public interface BoardMapper {
+
+
+  List<BoardVO> getList();
+
+  List<BoardVO> getPage(Criteria criteria);
+
+  int getTotal(Criteria criteria);
 
   void insert(BoardVO vo);
-  List<BoardVO> findAll();
-  BoardVO findById(Long bId);
-  void delete(Long bId);
+  BoardVO findById(Long bno);
+  void delete(Long bno);
   void update(BoardVO boardVO);
-  void increaseHits(Long bId);
+  void increaseHits(Long bno);
 
 
 }

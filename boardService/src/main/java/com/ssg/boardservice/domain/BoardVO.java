@@ -11,7 +11,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 public class BoardVO {
-  private Long bId;
+  private Long bno;
   private String title;
   private String writer;
   private String content;
@@ -20,7 +20,7 @@ public class BoardVO {
   private LocalDateTime updatedDate;
   private Long hits;
   private String filePath;
-  private String originalFileName; // <--- 이 필드를 추가합니다.
+  private String originalFileName;
   private String userId;
 }
 

@@ -5,19 +5,16 @@ import com.ssg.boardservice.domain.BoardVO;
 import com.ssg.boardservice.domain.Criteria;
 import com.ssg.boardservice.dto.BoardDTO;
 import com.ssg.boardservice.dto.BoardRegisterDTO;
-import com.ssg.boardservice.mapper.BoardMapper;
-import java.io.File;
+import com.ssg.boardservice.mappers.BoardMapper;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Log4j2
 @Service

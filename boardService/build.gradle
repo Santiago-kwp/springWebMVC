@@ -59,6 +59,11 @@ dependencies {
   implementation 'org.mybatis:mybatis:3.5.7'
   implementation 'org.mybatis:mybatis-spring:2.0.6'
 
+  // @valid 어노테이션 사용하기 위함.
+  implementation 'org.hibernate.validator:hibernate-validator:6.2.5.Final'
+  implementation 'javax.el:javax.el-api:3.0.0'
+  implementation 'org.glassfish.web:javax.el:2.2.6'
+
 
   implementation 'jstl:jstl:1.2'
 

@@ -67,7 +67,7 @@
   </bean>
 
   <!--  mybatis 매퍼 인터페이스 스캔 -->
-  <mybatis:scan base-package="com.ssg.boardservice.mapper"/>
+  <mybatis:scan base-package="com.ssg.boardservice.mappers"/>
 
 
 

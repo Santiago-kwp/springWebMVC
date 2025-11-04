@@ -5,8 +5,26 @@
 
 <mapper namespace="com.ssg.springboard.mappers.ReplyMapper">
 
-  <insert id="insert" >
-    <selectKey order = "AFTER" keyProperty = "rno" resultType="long">
+  <sql id="search">
+    <if test="(types != null and keyword != null)">
+      <foreach collection="types" item="type" open=" and ( " separator="OR" close=")">
+        <choose>
+          <when test='type.equals("T")'>
+            title like concat('%',#{keyword},'%')
+          </when>
+          <when test='type.equals("C")'>
+            content like concat('%',#{keyword},'%')
+          </when>
+          <when test='type.equals("W")'>
+            writer like concat('%',#{keyword},'%')
+          </when>
+        </choose>
+      </foreach>
+    </if>
+  </sql>
+
+  <insert id="insert">
+    <selectKey order="AFTER" keyProperty="rno" resultType="long">
       SELECT LAST_INSERT_ID()
     </selectKey>
 
@@ -24,7 +42,7 @@
     where rno = #{rno}
   </update>
 
-  <delete id="delete">
+  <delete id="deleteOne">
     delete from reply
     where rno = #{rno}
   </delete>
@@ -32,10 +50,16 @@
   <select id="getReplyList" resultType="ReplyVO">
     select * from reply
     where bno = #{bno} and rno > 0
+    <include refid="search"/>
     limit #{cri.skip}, #{cri.amount}
   </select>
 
-
-
+  <select id="getTotal" resultType="int">
+    select count(rno)
+    from
+    reply
+    where rno > 0
+    <include refid="search"/>
+  </select>
 
 </mapper>

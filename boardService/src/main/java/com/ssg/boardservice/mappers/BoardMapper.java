@@ -1,4 +1,4 @@
-package com.ssg.boardservice.mapper;
+package com.ssg.boardservice.mappers;
 
 import com.ssg.boardservice.domain.BoardVO;
 import com.ssg.boardservice.domain.Criteria;

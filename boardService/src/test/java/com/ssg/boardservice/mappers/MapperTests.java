@@ -1,4 +1,4 @@
-package com.ssg.boardservice.mapper;
+package com.ssg.boardservice.mappers;
 
 
 import com.ssg.boardservice.domain.BoardVO;
@@ -10,7 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration("file:../../../../../../main/webapp/WEB-INF/spring/root-context_old.xml")
+@ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
 @Log4j2
 public class MapperTests {
 
